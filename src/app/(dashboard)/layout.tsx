@@ -1,3 +1,4 @@
+import Navigation from '@/components/Navigation';
 import SideMenu from '@/components/SideMenu';
 
 export default function DashboardLayout({
@@ -10,7 +11,10 @@ export default function DashboardLayout({
       <div className="hidden lg:w-1/5 lg:block">
         <SideMenu />
       </div>
-      <main className="bg-stone-50 w-full lg:w-4/5">{children}</main>
+      <main className="bg-stone-200 w-full lg:w-4/5">
+        <Navigation />
+        {children}
+      </main>
     </div>
   );
 }
