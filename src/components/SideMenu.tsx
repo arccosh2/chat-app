@@ -37,7 +37,7 @@ const SideMenu = () => {
             )}
           >
             <div className="flex items-center">
-              <route.Icon className={cn('w-5 h-5 mr-2', route.iconColor)} />
+              <route.Icon className={cn('w-5 h-5 mr-2', 'text-yellow-600')} />
               <p>{route.label}</p>
             </div>
           </Link>
