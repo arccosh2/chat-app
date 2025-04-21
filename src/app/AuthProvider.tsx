@@ -11,7 +11,7 @@ export default function AuthProvider({
   children: React.ReactNode;
 }) {
   const dispatch = useAppDispatch();
-  const { currentUser, isLoading } = useAppSelector((state) => state.auth);
+  const { isLoading } = useAppSelector((state) => state.auth);
 
   useEffect(() => {
     dispatch(fetchCurrentUser());
@@ -19,10 +19,6 @@ export default function AuthProvider({
 
   if (isLoading) {
     return <LoaderCircle className="animate-spin" />;
-  }
-
-  if (!currentUser) {
-    return <div>You are not logged in</div>;
   }
 
   return <>{children}</>;
