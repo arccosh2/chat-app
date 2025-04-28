@@ -3,14 +3,15 @@
 import { Button } from '@/components/ui/button';
 import { fetchCurrentUser } from '@/lib/features/auth/authSlice';
 import { auth, provider } from '@/lib/firebase/firebaseClient';
-import { useAppDispatch } from '@/lib/hooks';
+import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import { signInWithPopup } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 const LoginPage = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const { currentUser } = useAppSelector((state) => state.auth);
 
   const handleClick = () => {
     signInWithPopup(auth, provider)
@@ -22,6 +23,13 @@ const LoginPage = () => {
         console.error(error);
       });
   };
+
+  useEffect(() => {
+    if (!currentUser) return;
+
+    router.push('/chat');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentUser]);
 
   return <Button onClick={handleClick}>login</Button>;
 };
