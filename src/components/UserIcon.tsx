@@ -2,7 +2,7 @@
 
 import React, { useEffect } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
-import { useAppSelector } from '@/lib/hooks';
+import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,9 +13,11 @@ import {
 import { auth } from '@/lib/firebase/firebaseClient';
 import { useRouter } from 'next/navigation';
 import { signOut } from 'firebase/auth';
+import { fetchCurrentUser } from '@/lib/features/auth/authSlice';
 
 const UserIcon = () => {
   const router = useRouter();
+  const dispatch = useAppDispatch();
 
   const currentUser = useAppSelector((state) => state.auth.currentUser);
   const profileImage = currentUser?.photoURL ?? undefined;
@@ -24,6 +26,7 @@ const UserIcon = () => {
     signOut(auth)
       .then(() => {
         router.push('/login');
+        dispatch(fetchCurrentUser());
       })
       .catch((error) => console.error(error));
   };
