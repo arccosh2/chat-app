@@ -40,6 +40,8 @@ const SideMenu = () => {
   const [chatRooms, setChatRooms] = useState<ChatRoom[]>([]);
 
   useEffect(() => {
+    if (!currentUser) return;
+
     const q = query(
       collection(db, 'chats'),
       where('user_id', '==', currentUser?.uid),
