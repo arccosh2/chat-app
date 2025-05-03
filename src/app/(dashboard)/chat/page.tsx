@@ -1,6 +1,8 @@
+import ChatRoom from '@/components/ChatRoom';
 import React from 'react';
+
 const ChatPage = () => {
-  return <div>chat page</div>;
+  return <ChatRoom />;
 };
 
 export default ChatPage;

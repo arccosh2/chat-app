@@ -3,7 +3,7 @@ import ChatMessages from './ChatMessages';
 import ChatForm from './ChatForm';
 
 interface ChatRoomProps {
-  chatRoomId: string;
+  chatRoomId?: string;
 }
 
 const ChatRoom = ({ chatRoomId }: ChatRoomProps) => {
