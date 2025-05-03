@@ -1,6 +1,6 @@
 import { MessageSquare } from 'lucide-react';
 
-export const routes = [
+export const menus = [
   {
     label: 'Chat',
     path: '/chat',
