@@ -54,7 +54,7 @@ const ChatMessages = ({ chatRoomId }: ChatMessagesProps) => {
   if (!chatRoomId) return <Panel />;
 
   return (
-    <div className="bg-red-300 flex-1 p-6 space-y-4 overflow-auto">
+    <div className="flex-1 p-6 space-y-4 overflow-auto">
       {messages.map((message) => (
         <div key={message.id} className="flex gap-4">
           {message.sender === 'user' ? <UserAvatar /> : <AIAvatar />}
