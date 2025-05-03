@@ -10,9 +10,10 @@ import {
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase/firebaseClient';
 import UserAvatar from './UserAvatar';
+import Panel from './Panel';
 
 interface ChatMessagesProps {
-  chatRoomId: string;
+  chatRoomId?: string;
 }
 
 type Sender = 'user' | 'assistant';
@@ -49,6 +50,8 @@ const ChatMessages = ({ chatRoomId }: ChatMessagesProps) => {
 
     return () => unsubscribe();
   }, [chatRoomId]);
+
+  if (!chatRoomId) return <Panel />;
 
   return (
     <div className="bg-red-300 flex-1 p-6 space-y-4 overflow-auto">
