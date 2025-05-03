@@ -12,8 +12,10 @@ export default function DashboardLayout({
         <SideMenu />
       </div>
       <main className="bg-stone-200 w-full lg:w-4/5">
-        <Navigation />
-        {children}
+        <div className="h-full flex flex-col">
+          <Navigation />
+          {children}
+        </div>
       </main>
     </div>
   );

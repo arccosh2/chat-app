@@ -60,7 +60,7 @@ const SideMenu = () => {
     });
 
     return () => unsubscribe();
-  }, [currentUser?.uid]);
+  }, [currentUser, currentUser?.uid]);
 
   return (
     <div className="bg-stone-900 text-stone-200 h-full p-4 space-y-3 flex flex-col">
