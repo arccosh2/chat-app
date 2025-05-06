@@ -8,8 +8,18 @@ import { useForm } from 'react-hook-form';
 import { Button } from './ui/button';
 import { Send } from 'lucide-react';
 import { z } from 'zod';
+import { addDoc, collection, doc, serverTimestamp } from 'firebase/firestore';
+import { db } from '@/lib/firebase/firebaseClient';
+import { useAppSelector } from '@/lib/hooks';
+import axios from 'axios';
 
-const ChatForm = () => {
+interface Props {
+  chatRoomId?: string;
+}
+
+const ChatForm = ({ chatRoomId }: Props) => {
+  const { currentUser } = useAppSelector((state) => state.auth);
+
   const formSchema = z.object({
     prompt: z.string().min(1, {
       message: 'Prompt is required',
@@ -22,8 +32,34 @@ const ChatForm = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     console.log(values.prompt);
+
+    try {
+      let chatRoomRef;
+
+      if (!chatRoomId) {
+        const newChatDocRef = await addDoc(collection(db, 'chats'), {
+          first_message: values.prompt,
+          last_updated: serverTimestamp(),
+          type: 'chat',
+          user_id: currentUser?.uid,
+        });
+
+        chatRoomRef = doc(db, 'chats', newChatDocRef.id);
+      } else {
+        chatRoomRef = doc(db, 'chats', chatRoomId);
+      }
+
+      const response = await axios.post('/api/chat', {
+        prompt: values.prompt,
+        chatRoomId: chatRoomRef.id,
+      });
+
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (

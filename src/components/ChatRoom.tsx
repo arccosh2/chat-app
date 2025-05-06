@@ -10,7 +10,7 @@ const ChatRoom = ({ chatRoomId }: ChatRoomProps) => {
   return (
     <>
       <ChatMessages chatRoomId={chatRoomId} />
-      <ChatForm />
+      <ChatForm chatRoomId={chatRoomId} />
     </>
   );
 };
