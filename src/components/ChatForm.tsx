@@ -11,6 +11,7 @@ import { z } from 'zod';
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase/firebaseClient';
 import { useAppSelector } from '@/lib/hooks';
+import axios from 'axios';
 
 interface Props {
   chatRoomId?: string;
@@ -43,6 +44,12 @@ const ChatForm = ({ chatRoomId }: Props) => {
           user_id: currentUser?.uid,
         });
       }
+
+      const response = await axios.post('/api/chat', {
+        prompt: values.prompt,
+      });
+
+      console.log(response);
     } catch (error) {
       console.error(error);
     }
