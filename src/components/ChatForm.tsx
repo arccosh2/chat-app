@@ -8,8 +8,17 @@ import { useForm } from 'react-hook-form';
 import { Button } from './ui/button';
 import { Send } from 'lucide-react';
 import { z } from 'zod';
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { db } from '@/lib/firebase/firebaseClient';
+import { useAppSelector } from '@/lib/hooks';
 
-const ChatForm = () => {
+interface Props {
+  chatRoomId?: string;
+}
+
+const ChatForm = ({ chatRoomId }: Props) => {
+  const { currentUser } = useAppSelector((state) => state.auth);
+
   const formSchema = z.object({
     prompt: z.string().min(1, {
       message: 'Prompt is required',
@@ -22,8 +31,21 @@ const ChatForm = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     console.log(values.prompt);
+
+    try {
+      if (!chatRoomId) {
+        const newChatDocRef = await addDoc(collection(db, 'chats'), {
+          first_message: values.prompt,
+          last_updated: serverTimestamp(),
+          type: 'chat',
+          user_id: currentUser?.uid,
+        });
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
