@@ -12,6 +12,7 @@ import { addDoc, collection, doc, serverTimestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase/firebaseClient';
 import { useAppSelector } from '@/lib/hooks';
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
 
 interface Props {
   chatRoomId?: string;
@@ -19,6 +20,7 @@ interface Props {
 
 const ChatForm = ({ chatRoomId }: Props) => {
   const { currentUser } = useAppSelector((state) => state.auth);
+  const router = useRouter();
 
   const formSchema = z.object({
     prompt: z.string().min(1, {
@@ -37,6 +39,7 @@ const ChatForm = ({ chatRoomId }: Props) => {
 
     try {
       let chatRoomRef;
+      let isNewChat = false;
 
       if (!chatRoomId) {
         const newChatDocRef = await addDoc(collection(db, 'chats'), {
@@ -47,6 +50,7 @@ const ChatForm = ({ chatRoomId }: Props) => {
         });
 
         chatRoomRef = doc(db, 'chats', newChatDocRef.id);
+        isNewChat = true;
       } else {
         chatRoomRef = doc(db, 'chats', chatRoomId);
       }
@@ -55,6 +59,10 @@ const ChatForm = ({ chatRoomId }: Props) => {
         prompt: values.prompt,
         chatRoomId: chatRoomRef.id,
       });
+
+      if (isNewChat) {
+        router.push(`/chat/${chatRoomRef.id}`);
+      }
 
       console.log(response);
     } catch (error) {
