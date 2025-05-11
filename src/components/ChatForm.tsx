@@ -8,7 +8,13 @@ import { useForm } from 'react-hook-form';
 import { Button } from './ui/button';
 import { Send } from 'lucide-react';
 import { z } from 'zod';
-import { addDoc, collection, doc, serverTimestamp } from 'firebase/firestore';
+import {
+  addDoc,
+  collection,
+  doc,
+  serverTimestamp,
+  updateDoc,
+} from 'firebase/firestore';
 import { db } from '@/lib/firebase/firebaseClient';
 import { useAppSelector } from '@/lib/hooks';
 import axios from 'axios';
@@ -62,6 +68,11 @@ const ChatForm = ({ chatRoomId }: Props) => {
 
       if (isNewChat) {
         router.push(`/chat/${chatRoomRef.id}`);
+      } else {
+        // すでにチャットルームがある場合は、last_updatedを更新
+        await updateDoc(chatRoomRef, {
+          last_updated: serverTimestamp(),
+        });
       }
 
       console.log(response);
